@@ -15,7 +15,7 @@ This repository contains research code for the paper [*Towards Privacy-Aware Sig
 
 
 
-SSVP-SLT relies on masked autoencoding (MAE) on anonymized videos as a form of self-supervised pretraining to learn continuous sign language representations at scale. The learned representations are transferred to the supervised gloss-free sign language translation task. SSVP-SLT outperforms prior SOTA methods on the ASL-to-English How2Sign benchmark in the finetuned and zero-shot settings by over 3 BLEU points. 
+SSVP-SLT relies on masked autoencoding (MAE) on anonymized and unannotated videos as a form of self-supervised pretraining to learn continuous sign language representations at scale. The learned representations are transferred to the supervised gloss-free sign language translation task. SSVP-SLT outperforms prior SOTA methods on the ASL-to-English How2Sign benchmark in the finetuned and zero-shot settings by over 3 BLEU points. 
 
 ----
 
