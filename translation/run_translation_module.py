@@ -1,6 +1,6 @@
 import logging
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
@@ -118,13 +118,14 @@ class DistConfig:
 
 @dataclass
 class Config:
-    common: CommonConfig = CommonConfig()
-    model: ModelConfig = ModelConfig()
-    data: DataConfig = DataConfig()
-    criterion: CriterionConfig = CriterionConfig()
-    optim: OptimizationConfig = OptimizationConfig()
-    dist: DistConfig = DistConfig()
-    wandb: WandbConfig = WandbConfig()
+    common: CommonConfig = field(default_factory=CommonConfig)
+    model: ModelConfig = field(default_factory=ModelConfig)
+    data: DataConfig = field(default_factory=DataConfig)
+    criterion: CriterionConfig = field(default_factory=CriterionConfig)
+    optim: OptimizationConfig = field(default_factory=OptimizationConfig)
+    dist: DistConfig = field(default_factory=DistConfig)
+    wandb: WandbConfig = field(default_factory=WandbConfig)
+    
     debug: bool = False
     fairseq: bool = False
 
