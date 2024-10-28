@@ -11,7 +11,7 @@
 #### 1. Create conda environment
 
 ```bash
-conda create --name ssvp_slt python=3.10 cmake ipython
+conda create --name ssvp_slt python=3.10 cmake
 conda activate ssvp_slt
 conda install pytorch==2.0.1 torchvision==0.15.2 pytorch-cuda=11.8 -c pytorch -c nvidia
 conda install av -c conda-forge
