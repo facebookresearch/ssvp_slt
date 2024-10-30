@@ -4,11 +4,11 @@
 {
     "distutils": {
         "depends": [
-            "C:\\Users\\myous\\AppData\\Local\\Temp\\pip-build-env-7b3b5wvo\\overlay\\Lib\\site-packages\\numpy\\_core\\include\\numpy\\arrayobject.h",
-            "C:\\Users\\myous\\AppData\\Local\\Temp\\pip-build-env-7b3b5wvo\\overlay\\Lib\\site-packages\\numpy\\_core\\include\\numpy\\arrayscalars.h",
-            "C:\\Users\\myous\\AppData\\Local\\Temp\\pip-build-env-7b3b5wvo\\overlay\\Lib\\site-packages\\numpy\\_core\\include\\numpy\\ndarrayobject.h",
-            "C:\\Users\\myous\\AppData\\Local\\Temp\\pip-build-env-7b3b5wvo\\overlay\\Lib\\site-packages\\numpy\\_core\\include\\numpy\\ndarraytypes.h",
-            "C:\\Users\\myous\\AppData\\Local\\Temp\\pip-build-env-7b3b5wvo\\overlay\\Lib\\site-packages\\numpy\\_core\\include\\numpy\\ufuncobject.h"
+            "/tmp/pip-build-env-zoh18iqa/overlay/lib/python3.10/site-packages/numpy/core/include/numpy/arrayobject.h",
+            "/tmp/pip-build-env-zoh18iqa/overlay/lib/python3.10/site-packages/numpy/core/include/numpy/arrayscalars.h",
+            "/tmp/pip-build-env-zoh18iqa/overlay/lib/python3.10/site-packages/numpy/core/include/numpy/ndarrayobject.h",
+            "/tmp/pip-build-env-zoh18iqa/overlay/lib/python3.10/site-packages/numpy/core/include/numpy/ndarraytypes.h",
+            "/tmp/pip-build-env-zoh18iqa/overlay/lib/python3.10/site-packages/numpy/core/include/numpy/ufuncobject.h"
         ],
         "extra_compile_args": [
             "-std=c++11",
@@ -18,8 +18,8 @@
             "-D_GLIBCXX_USE_CXX11_ABI=0"
         ],
         "include_dirs": [
-            "C:\\Users\\myous\\AppData\\Local\\Temp\\pip-build-env-7b3b5wvo\\overlay\\Lib\\site-packages\\numpy\\_core\\include",
-            "C:\\Users\\myous\\AppData\\Local\\Temp\\pip-build-env-7b3b5wvo\\overlay\\Lib\\site-packages\\numpy\\_core\\include"
+            "/tmp/pip-build-env-zoh18iqa/overlay/lib/python3.10/site-packages/numpy/core/include",
+            "/tmp/pip-build-env-zoh18iqa/overlay/lib/python3.10/site-packages/numpy/core/include"
         ],
         "language": "c++",
         "name": "fairseq.data.data_utils_fast",
