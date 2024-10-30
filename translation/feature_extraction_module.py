@@ -1,10 +1,9 @@
-import asyncio
 import math
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from einops import rearrange
-from typing import Any, Generator, List, Union, Tuple, Literal
+from typing import Any, Generator, List, Union, Tuple
 
 import pandas as pd
 import torch
@@ -12,15 +11,15 @@ from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from ssvp_slt.data.video_dataset import VideoDataset
-import ssvp_slt.modeling.sign_hiera as sign_hiera
-import ssvp_slt.util.misc as misc
-from ssvp_slt.modeling.sign_hiera import SignHiera
-from stopes.core import Launcher, Requirements, StopesModule
+from src.ssvp_slt.data.video_dataset import VideoDataset
+import src.ssvp_slt.modeling.sign_hiera as sign_hiera
+import src.ssvp_slt.util.misc as misc
+from src.ssvp_slt.modeling.sign_hiera import SignHiera
+from stopes.core import Requirements, StopesModule
 
 @dataclass
 class LauncherConfig:
-    cluster: Literal["slurm", "local"] = "slurm"
+    cluster: str = "slurm"
     partition: str = "gpu"
     max_jobarray_jobs: int = 128
 
