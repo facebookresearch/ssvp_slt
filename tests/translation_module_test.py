@@ -7,8 +7,7 @@ class TestTranslationModule(unittest.TestCase):
     def setUp(self):
         # Basic setup for testing TranslationModule
         self.config = Config()
-        self.config.common.load_model = "mock_model_path"
-        self.config.model.name_or_path = "mock_model_path"
+        self.config.model.name_or_path = "translation/signhiera_mock.pth"
         self.translator = TranslationModule(self.config)
 
     @patch("run_translation_module.TranslationModule.run_translation")
@@ -29,8 +28,7 @@ class TestTranslationModule(unittest.TestCase):
 
     def test_configuration_loading(self):
         # Ensure the configuration fields are loaded as expected
-        self.assertEqual(self.config.common.load_model, "mock_model_path")
-        self.assertEqual(self.config.model.name_or_path, "mock_model_path")
+        self.assertEqual(self.config.model.name_or_path, "translation/signhiera_mock.pth")
 
     @patch("translation_module.TranslationModule.run_translation")
     def test_translation_output_type(self, mock_run_translation):

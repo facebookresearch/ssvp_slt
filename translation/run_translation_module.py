@@ -6,7 +6,7 @@ from typing import Optional
 
 from omegaconf import II, MISSING, DictConfig, OmegaConf
 from ssvp_slt.util.misc import reformat_logger
-from main_translation import main as translate
+from translation.main_translation import main as translate
 
 logger = logging.getLogger(__name__)
 
