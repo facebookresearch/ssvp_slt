@@ -1,13 +1,15 @@
 import unittest
 from translation.feature_extraction_module import FeatureExtractionConfig, FeatureExtractionModule, LauncherConfig
 from unittest.mock import patch, MagicMock
+from utils.download_model import get_model_path
 
 class TestFeatureExtractionModule(unittest.TestCase):
     def setUp(self):
         # Mock the configuration for the FeatureExtractionModule
+        model_path = get_model_path()
         self.config = FeatureExtractionConfig(
             data_dir="MOCK_dataset",
-            pretrained_model_path="signhiera_mock.pth", 
+            pretrained_model_path=model_path, 
             launcher=LauncherConfig(cluster="local")
         )
         self.module = FeatureExtractionModule(self.config)
