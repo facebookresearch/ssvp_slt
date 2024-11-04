@@ -1,6 +1,16 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+# --------------------------------------------------------
+# References:
+# DeiT: https://github.com/facebookresearch/deit
+# BEiT: https://github.com/microsoft/unilm/tree/master/beit
+# --------------------------------------------------------
+
 import torch
 import dlib
-import os
 
 # Check if CUDA is available and if it's using a GPU
 if torch.cuda.is_available():
@@ -13,7 +23,6 @@ if torch.cuda.is_available():
 
 else:
   print("CUDA is not available.")
-  # Consider using a runtime with GPU acceleration in Colab.
   print("Consider using a runtime with GPU acceleration in Colab.")
 
 
@@ -23,4 +32,3 @@ if dlib.DLIB_USE_CUDA:
   print(f"Number of dlib CUDA devices: {dlib.cuda.get_num_devices()}")
 else:
   print("dlib CUDA is not available.")
-  # Consider alternative libraries or configurations if needed.

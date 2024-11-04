@@ -4,7 +4,7 @@
 
 - Linux, CUDA >= 11.7, Python >= 3.8, PyTorch >= 2.0.0 (our setup below is based on CUDA 11.8, Python 3.10, PyTorch 2.0.1; more recent versions should work too, but no guarantees)
 - Conda (anaconda / miniconda work well)
-- visual studio visual studio (2022/2019/2017) build tools
+- visual studio (2019) build tools (Just for windows)
 
 ### Setup
 
@@ -13,9 +13,8 @@
 ```bash
 conda create --name ssvp_slt python=3.10 cmake
 conda activate ssvp_slt
-conda install pytorch==2.0.1 torchvision==0.15.2 pytorch-cuda=11.8 -c pytorch -c nvidia
-conda install av -c conda-forge
 python -m pip install torch==2.2.0 torchvision==0.17.0 torchaudio==2.2.0 --index-url https://download.pytorch.org/whl/cu118
+conda install av -c conda-forge
 ```
 
 #### 2. (Optional) Video dataloader GPU decoding backend support
@@ -81,12 +80,12 @@ export LD_LIBRARY_PATH=$(path-to-your-cuda-11.8)/lib64:${LD_LIBRARY_PATH}
 
 If you want to use [Weights and Biases](https://wandb.ai) to track your training runs (via `cfg.wandb.enabled=true`), you need to ensure your `WAND_API_KEY` environment variable is set correctly.
 
-#### 7. Test your env
+#### 8. Test your env
 
-you can excute `test_env.py` python script to check if the dependencies are installed
+you can execute `test_env.py` python script to check if the dependencies are installed
 
 ```bash
-python test_env.py
+python tests/test_env.py
 ```
 
 The output (values could be quite different)
