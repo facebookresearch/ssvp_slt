@@ -95,3 +95,6 @@ dmypy.json
 *.mp4
 sweep*/
 core*
+
+features_outputs
+*.pth
