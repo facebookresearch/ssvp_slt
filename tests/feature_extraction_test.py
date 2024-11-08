@@ -12,7 +12,7 @@ from utils.download_model import get_model_path
 class TestFeatureExtractionModule(unittest.TestCase):
     def setUp(self):
         # Mock the configuration for the FeatureExtractionModule
-        model_path = get_model_path()
+        model_path = get_model_path('https://dl.fbaipublicfiles.com/SONAR/asl/signhiera_mock.pth')
         self.config = FeatureExtractionConfig(
             data_dir="MOCK_dataset",
             pretrained_model_path=model_path, 

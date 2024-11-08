@@ -7,11 +7,9 @@
 import os
 import wget
 
-def get_model_path():
+def get_model_path(url: str):
     model_path = 'signhiera_mock.pth'
-    url = 'https://dl.fbaipublicfiles.com/SONAR/asl/signhiera_mock.pth'
-
-    # Check if the model file exists
+     # Check if the model file exists
     if os.path.exists(model_path):
         print(f"Model already exists at: {model_path}")
     else:
