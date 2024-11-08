@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+# --------------------------------------------------------
+
 import logging
 import os
 from dataclasses import dataclass, field
@@ -6,7 +13,8 @@ from typing import Optional
 
 from omegaconf import II, MISSING, DictConfig, OmegaConf
 from ssvp_slt.util.misc import reformat_logger
-from translation.main_translation import main as translate
+# from main_translation import main as translate
+from translation.main_translation import eval as translate
 
 logger = logging.getLogger(__name__)
 

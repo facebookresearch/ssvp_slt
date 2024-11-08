@@ -12,9 +12,29 @@ import ssvp_slt.util.misc as misc
 import torch
 from omegaconf import DictConfig, OmegaConf
 
-from engine_translation import evaluate, evaluate_full, train_one_epoch
-from utils_translation import (create_dataloader, create_model_and_tokenizer,
+from translation.engine_translation import evaluate, evaluate_full, train_one_epoch
+from translation.utils_translation import (create_dataloader, create_model_and_tokenizer,
                                create_optimizer_and_loss_scaler)
+
+
+def eval(cfg: DictConfig):
+    """
+    Function to handle the evaluation of the model.
+    """
+    device = torch.device(cfg.common.device)
+    model, tokenizer = create_model_and_tokenizer(cfg)
+
+    # Load model for finetuning or eval
+    if (misc.get_last_checkpoint(cfg) is None or cfg.common.eval) and cfg.common.load_model:
+        misc.load_model(model, cfg.common.load_model)
+
+    evaluate_full(cfg, model.to(device), tokenizer, device)
+    # Create validation data loader and evaluate the model
+    dataloader_val = create_dataloader("val", cfg, tokenizer)
+    val_stats, _, _ = evaluate(cfg, dataloader_val, model.to(device), tokenizer, device)
+
+    # Optionally, print or log val_stats for evaluation feedback
+    print("Validation Stats:", val_stats)
 
 
 def main(cfg: DictConfig):
