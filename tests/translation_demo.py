@@ -1,15 +1,14 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# All rights reserved.
+# # Copyright (c) Meta Platforms, Inc. and affiliates.
+# # All rights reserved.
 
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
-# --------------------------------------------------------
+# # This source code is licensed under the license found in the
+# # LICENSE file in the root directory of this source tree.
+# # --------------------------------------------------------
 
 import sys
 import os
 from omegaconf import OmegaConf
 
-# Add the parent directory to sys.path so it can locate the `translation` folder
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Now, import the modules

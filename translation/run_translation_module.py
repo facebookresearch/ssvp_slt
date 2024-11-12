@@ -143,7 +143,7 @@ def run_translation(cfg: DictConfig):
     reformat_logger()
 
     if cfg.debug:
-        print("Running in debug mode")
+        logger("Running in debug mode")
 
     # If evaluating without training
     if cfg.common.eval:
