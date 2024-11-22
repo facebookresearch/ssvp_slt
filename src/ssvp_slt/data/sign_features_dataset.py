@@ -74,7 +74,7 @@ class SignFeaturesDataset(torch.utils.data.Dataset):
                     break
                 try:
                     feature_name, length, label = line.strip().split("\t")
-                    length = int(float(length))
+                    length = int(length)
                 except Exception:           
                     invalid += 1
                     continue
