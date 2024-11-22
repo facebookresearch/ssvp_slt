@@ -600,28 +600,27 @@ class SignHiera(nn.Module):
         from ssvp_slt.modeling.clip import CLIP, CLIPTextCfg, CLIPVisionCfg
 
         checkpoint = torch.load(clip_model_path)
-        args = checkpoint["args"]
+        clip_model_cfg = checkpoint["cfg"]["model"]
         model_params = checkpoint["clip"]
 
         vision_cfg = CLIPVisionCfg(
-            model_id=args.model,
-            proj="mlp",
+            model_id=clip_model_cfg["vision_model_name"],
+            proj=clip_model_cfg["vision_model_proj"],
         )
 
-        # FIXME: might cause errors if proj and pooler are not `mlp` and `mean_pooler`
         text_cfg = CLIPTextCfg(
-            hf_model_name=args.text_model_name_or_path,
-            proj="mlp",
-            pooler_type="mean_pooler",
+            hf_model_name=clip_model_cfg["text_model_name_or_path"],
+            proj=clip_model_cfg["text_model_proj"],
+            pooler_type=clip_model_cfg["text_model_pooler"],
         )
-        clip = CLIP(embed_dim=768, vision_cfg=vision_cfg, text_cfg=text_cfg, output_dict=True)
+        clip = CLIP(embed_dim=clip_model_cfg.pop("embed_dim"), vision_cfg=vision_cfg, text_cfg=text_cfg, output_dict=True)
 
         print(f"Loading CLIP weights from {clip_model_path}")
         msg = clip.load_state_dict(model_params)
         print(msg)
 
         print("Loading SignHiera weights from CLIP vision tower")
-        model = sys.modules[__name__].__dict__[model_id](**args.__dict__)
+        model = sys.modules[__name__].__dict__[model_id](**clip_model_cfg)
         msg = model.load_state_dict(clip.visual.transformer.state_dict(), strict=False)
         print(msg)
 
