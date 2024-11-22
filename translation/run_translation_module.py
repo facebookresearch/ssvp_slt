@@ -13,7 +13,7 @@ from typing import Optional
 
 from omegaconf import II, MISSING, DictConfig, OmegaConf
 from ssvp_slt.util.misc import reformat_logger
-# from main_translation import main as translate
+
 from translation.main_translation import eval as translate
 
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ class CommonConfig:
 @dataclass
 class ModelConfig:
     name_or_path: str = None
-    feature_dim: int = 512
+    feature_dim: int = 768
     from_scratch: bool = False
     dropout: float = 0.3
     num_beams: int = 5

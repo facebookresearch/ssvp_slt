@@ -7,7 +7,10 @@
 
 import datetime
 import time
+import json
+import os
 
+import evaluate as hf_evaluate
 import ssvp_slt.util.misc as misc
 import torch
 from omegaconf import DictConfig, OmegaConf
@@ -15,26 +18,51 @@ from omegaconf import DictConfig, OmegaConf
 from translation.engine_translation import evaluate, evaluate_full, train_one_epoch
 from translation.utils_translation import (create_dataloader, create_model_and_tokenizer,
                                create_optimizer_and_loss_scaler)
-
-
+  
 def eval(cfg: DictConfig):
     """
-    Function to handle the evaluation of the model.
+    Function to handle the evaluation of the model on validation data only.
     """
     device = torch.device(cfg.common.device)
     model, tokenizer = create_model_and_tokenizer(cfg)
 
-    # Load model for finetuning or eval
+    # Load model for evaluation
     if (misc.get_last_checkpoint(cfg) is None or cfg.common.eval) and cfg.common.load_model:
         misc.load_model(model, cfg.common.load_model)
 
-    evaluate_full(cfg, model.to(device), tokenizer, device)
-    # Create validation data loader and evaluate the model
-    dataloader_val = create_dataloader("val", cfg, tokenizer)
-    val_stats, _, _ = evaluate(cfg, dataloader_val, model.to(device), tokenizer, device)
+    cfg.common.eval = True
+    cfg.common.dist_eval = False
 
-    # Optionally, print or log val_stats for evaluation feedback
-    print("Validation Stats:", val_stats)
+    dataloader_val = create_dataloader("val", cfg, tokenizer)
+    stats, predictions, references = evaluate(
+        cfg, dataloader_val, model.to(device), tokenizer, device
+    )
+    # Clear GPU for BLEURT computations if enabled
+    model.to("cpu")
+    del model
+    torch.cuda.empty_cache()
+
+    # Compute BLEURT if configured and add full BLEURT array to stats
+    if cfg.common.compute_bleurt:
+        bleurt_metric = hf_evaluate.load("bleurt", module_type="metric", config_name="BLEURT-20")
+        stats["bleurt"] = bleurt_metric.compute(
+            predictions=predictions, references=references
+        )["scores"]
+
+    # Save results
+    output_dir = cfg.common.output_dir
+    print(f"Validation results: {json.dumps(stats, ensure_ascii=False, indent=4)}")
+
+    with open(os.path.join(output_dir, "val_outputs.tsv"), "w", encoding="utf-8") as f:
+        f.write("Prediction\tReference\n")
+        for hyp, ref in zip(predictions, references):
+            f.write(f"{hyp}\t{ref}\n")
+
+    with open(os.path.join(output_dir, "val_results.json"), "w") as f:
+        json.dump(stats, f, ensure_ascii=False, indent=4)
+
+    print(f"Wrote validation outputs to {cfg.common.output_dir}")
+    print("Evaluation completed.")
 
 
 def main(cfg: DictConfig):
