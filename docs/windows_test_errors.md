@@ -7,7 +7,7 @@
 
 ---
 
-## Error 1: Installing fairseq-sl
+## 1: Installing fairseq-sl
 
 ### Steps to Reproduce:
 
@@ -26,23 +26,38 @@
    pip install -e .
    ```
 
-### Error Message:
+### Error Message 1:
+
+```bash
+error: subprocess-exited-with-error
+
+× Getting requirements to build editable did not run successfully.
+│ exit code: 1
+╰─> See above for output.
+
+note: This error originates from a subprocess, and is likely not a problem with pip.
+```
+
+### Suggested solution:
+
+**Run Cmd as administrator**
+
+### Error Message 2:
 
 ```bash
 ERROR: Cannot install fairseq and fairseq==0.12.2 because these package versions have conflicting dependencies.
 ```
 
-### Traceback:
+### Suggested solution:
 
 ```bash
-The conflict is caused by:
-    fairseq 0.12.2 depends on omegaconf<2.1
-    hydra-core 1.0.7 depends on omegaconf<2.1 and >=2.0.5
+python -m pip install pip<24.1
+pip install omegaconf==2.0.5
 ```
 
 ---
 
-## Error 2: Installing dlib with CUDA
+## 2: Installing dlib with CUDA
 
 ### Steps to Reproduce:
 
@@ -85,9 +100,13 @@ The conflict is caused by:
 -- Disabling CUDA support for dlib.  DLIB WILL NOT USE CUDA
 ```
 
+### Workaround:
+
+for now, no Suggested solution solved this error, but you caan run it on cpu or on a cloud.
+
 ---
 
-## Error 3: Fetching extracted features
+## 3: Fetching extracted features
 
 ### Steps to Reproduce:
 
@@ -100,63 +119,4 @@ The conflict is caused by:
 
 ```bash
 RuntimeError: Failed to fetch features after 10 retries.
-```
-
-### Traceback:
-
-```bash
-Traceback (most recent call last):
-  File "D:\Pro\MLH\SLT\tests\translation_demo.py", line 39, in <module>
-    run_translation(translation_dict_config)
-  File "D:\Pro\MLH\SLT\translation\run_translation_module.py", line 158, in run_translation
-    translate(cfg)
-  File "D:\Pro\MLH\SLT\translation\main_translation.py", line 37, in eval
-    stats, predictions, references = evaluate(
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\_contextlib.py", line 115, in decorate_context
-    return func(*args, **kwargs)
-  File "D:\Pro\MLH\SLT\translation\engine_translation.py", line 208, in evaluate
-    for data_iter_step, batch in enumerate(metric_logger.log_every(dataloader, 10, header)):
-  File "d:\pro\mlh\slt\src\ssvp_slt\util\misc.py", line 207, in log_every
-    for obj in iterable:
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\dataloader.py", line 631, in __next__
-    data = self._next_data()
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\dataloader.py", line 675, in _next_data
-    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in fetch
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in <listcomp>
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\dataset.py", line 335, in __getitem__
-    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in fetch
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in <listcomp>
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in fetch
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in <listcomp>
-    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in fetch
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in fetch
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in <listcomp>
-    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in fetch
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in <listcomp>
-    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in fetch
-    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
-    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in fetch
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\_utils\fetch.py", line 51, in <listcomp>
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-  File "D:\Pro\MLH\conda\envs\ssvp_slt\lib\site-packages\torch\utils\data\dataset.py", line 335, in __getitem__
-    return self.datasets[dataset_idx][sample_idx]
-  File "d:\pro\mlh\slt\src\ssvp_slt\data\sign_features_dataset.py", line 158, in __getitem__
-    raise RuntimeError(f"Failed to fetch features after {self.num_retries} retries.")
 ```
