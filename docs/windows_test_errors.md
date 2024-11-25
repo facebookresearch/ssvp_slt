@@ -106,7 +106,45 @@ for now, no Suggested solution solved this error, but you caan run it on cpu or 
 
 ---
 
-## 3: Fetching extracted features
+## 3: Installing stopes
+
+### Steps to Reproduce:
+
+1. activate a conda environment:
+   ```bash
+   conda activate ssvp_slt
+   ```
+2. Install stopes:
+   ```bash
+   pip install git+https://github.com/facebookresearch/stopes.git
+   ```
+
+### Error Message:
+
+```bash
+ERROR: Failed building wheel for posix_ipc
+```
+
+### Suggested solution 1:
+
+Install stopes with --no-deps
+
+```bash
+pip install git+https://github.com/facebookresearch/stopes.git --no-deps
+```
+
+### Suggested solution 2:
+
+Use WSL
+
+```bash
+# Open WSL and activate your environment
+pip install git+https://github.com/facebookresearch/stopes.git
+```
+
+---
+
+## 4: Fetching extracted features
 
 ### Steps to Reproduce:
 
