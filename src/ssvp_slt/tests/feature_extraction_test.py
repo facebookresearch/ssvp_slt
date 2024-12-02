@@ -7,7 +7,7 @@
 import unittest
 from ssvp_slt.translation.feature_extraction_module import FeatureExtractionConfig, FeatureExtractionModule, LauncherConfig
 from unittest.mock import patch, MagicMock
-from ssvp_slt.utils.download_model import download_model
+from util.download_model import download_model
 
 class TestFeatureExtractionModule(unittest.TestCase):
     def setUp(self):
