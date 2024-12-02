@@ -17,10 +17,10 @@ from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from src.ssvp_slt.data.video_dataset import VideoDataset
-import src.ssvp_slt.modeling.sign_hiera as sign_hiera
-import src.ssvp_slt.util.misc as misc
-from src.ssvp_slt.modeling.sign_hiera import SignHiera
+from ssvp_slt.data.video_dataset import VideoDataset
+import ssvp_slt.modeling.sign_hiera as sign_hiera
+import ssvp_slt.util.misc as misc
+from ssvp_slt.modeling.sign_hiera import SignHiera
 from stopes.core import Requirements, StopesModule
 
 @dataclass

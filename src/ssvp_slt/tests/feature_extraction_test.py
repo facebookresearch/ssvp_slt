@@ -5,14 +5,14 @@
 # LICENSE file in the root directory of this source tree.
 
 import unittest
-from translation.feature_extraction_module import FeatureExtractionConfig, FeatureExtractionModule, LauncherConfig
+from ssvp_slt.translation.feature_extraction_module import FeatureExtractionConfig, FeatureExtractionModule, LauncherConfig
 from unittest.mock import patch, MagicMock
-from utils.download_model import get_model_path
+from ssvp_slt.utils.download_model import download_model
 
 class TestFeatureExtractionModule(unittest.TestCase):
     def setUp(self):
         # Mock the configuration for the FeatureExtractionModule
-        model_path = get_model_path('https://dl.fbaipublicfiles.com/SONAR/asl/signhiera_mock.pth')
+        model_path = download_model('https://dl.fbaipublicfiles.com/SONAR/asl/signhiera_mock.pth')
         self.config = FeatureExtractionConfig(
             data_dir="MOCK_dataset",
             pretrained_model_path=model_path, 
