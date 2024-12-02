@@ -1,16 +1,17 @@
 from omegaconf import OmegaConf
-from e2e import e2e_pipeline
+from run import e2e_pipeline
 from src.slt_inference.configs import RunConfig, FeatureExtractionConfig, TranslationConfig
 
 # Define the translation configuration
 translation_config = RunConfig(
-    video_path="D:/Pro/MLH/ctf/video.mp4",
+    video_path="./video.mp4",
     verbose=True,
+    use_sonar=False,
     feature_extraction=FeatureExtractionConfig(
-        pretrained_model_path="translation/signhiera_mock.pth",     
+        pretrained_model_path="./signhiera_mock.pth",     
     ),
     translation=TranslationConfig(
-        base_model_name="google/t5-v1_1-large",
+        base_model_name="google-t5/t5-base",
         tgt_langs=["eng_Latn", "fra_Latn"]
     )
 )

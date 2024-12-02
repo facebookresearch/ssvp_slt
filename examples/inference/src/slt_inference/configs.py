@@ -54,8 +54,8 @@ class FeatureExtractionConfig:
 @dataclass
 class TranslationConfig:
     pretrained_model_path: str = "checkpoints/translator.pth"
-    tokenizer_path: str = "checkpoints/tokenizer"
-    base_model_name: str = "google/t5-v1_1-large"
+    tokenizer_path: str = "google-t5/t5-base"
+    base_model_name: str = "google-t5/t5-base"
     feature_dim: int = 768
     decoder_path: str = "checkpoints/sonar_decoder.pt"
     decoder_spm_path: str = "checkpoints/decoder_sentencepiece.model"

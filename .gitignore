@@ -99,3 +99,4 @@ core*
 features_outputs
 MOCK_dataset
 *.pth
+*.mp4
