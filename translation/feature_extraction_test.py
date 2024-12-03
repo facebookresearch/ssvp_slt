@@ -15,7 +15,7 @@ class TestFeatureExtractionModule(unittest.TestCase):
         model_path = download_model('https://dl.fbaipublicfiles.com/SONAR/asl/signhiera_mock.pth')
         self.config = FeatureExtractionConfig(
             #You need to download blurred dailymoth-70h dataset first
-            data_dir="D:/Pro/MLH/data/blurred",
+            data_dir="path/to/your/blurred/dataset",
             pretrained_model_path=model_path, 
             launcher=LauncherConfig(cluster="local")
         )
