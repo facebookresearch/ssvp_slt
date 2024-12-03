@@ -5,16 +5,17 @@
 # LICENSE file in the root directory of this source tree.
 
 import unittest
-from ssvp_slt.translation.feature_extraction_module import FeatureExtractionConfig, FeatureExtractionModule, LauncherConfig
+from feature_extraction_module import FeatureExtractionConfig, FeatureExtractionModule, LauncherConfig
 from unittest.mock import patch, MagicMock
-from util.download_model import download_model
+from utils.download_model import download_model
 
 class TestFeatureExtractionModule(unittest.TestCase):
     def setUp(self):
         # Mock the configuration for the FeatureExtractionModule
         model_path = download_model('https://dl.fbaipublicfiles.com/SONAR/asl/signhiera_mock.pth')
         self.config = FeatureExtractionConfig(
-            data_dir="MOCK_dataset",
+            #You need to download blurred dailymoth-70h dataset first
+            data_dir="D:/Pro/MLH/data/blurred",
             pretrained_model_path=model_path, 
             launcher=LauncherConfig(cluster="local")
         )
