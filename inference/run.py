@@ -61,10 +61,10 @@ def run_pipeline(config: DictConfig):
 
 # Define the translation configuration
 translation_config = RunConfig(
-    video_path="D:/Pro/MLH/SLT/video.mp4",
+    video_path="path/to/your/video.mp4",
     verbose=True,
     feature_extraction=FeatureExtractionConfig(
-        pretrained_model_path="D:/Pro/MLH/SLT/signhiera_mock.pth",     
+        pretrained_model_path="path/to/your/model.pth",     
     ),
     translation=TranslationConfig(
         base_model_name="google-t5/t5-base",      
