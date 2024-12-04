@@ -12,7 +12,7 @@ from typing import Sequence
 import torch
 from omegaconf import DictConfig, OmegaConf
 from configs import FeatureExtractionConfig, RunConfig, TranslationConfig
-from preprocessing import Preprocessor
+#TODO: add Preprocessor class
 from feature_extraction import FeatureExtractor
 from translation import Translator
 
@@ -38,7 +38,6 @@ def run_pipeline(config: DictConfig):
     t0 = time.time()
 
     # Initialize components
-    preprocessor = Preprocessor(config.preprocessing, device=device)
     feature_extractor = FeatureExtractor(config.feature_extraction, device=device)
     translator_cls = Translator
     translator = translator_cls(config.translation, device=device, dtype=dtype)
@@ -47,8 +46,7 @@ def run_pipeline(config: DictConfig):
     if config.verbose:
         print(f"1. Model loading: {t1 - t0:.3f}s")
         
-    # Process input
-    inputs = preprocessor(Path(config.video_path))
+    #TODO: perform preprocessing
     extracted_features = feature_extractor(**inputs)    
 
     translations = translator(extracted_features)["translations"]
