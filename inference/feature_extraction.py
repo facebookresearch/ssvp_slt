@@ -15,7 +15,7 @@ from omegaconf import DictConfig
 
 from ssvp_slt.modeling import sign_hiera
 from ssvp_slt.modeling.sign_hiera import SignHiera
-from util import load_model
+from ssvp_slt.util.misc import load_model
 
 
 def shard_generator(data: Any, shard_size: int) -> Generator[Any, None, None]:
