@@ -1,3 +1,9 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+# --------------------------------------------------------
 
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
@@ -57,29 +63,18 @@ class TranslationConfig:
     tokenizer_path: str = "google-t5/t5-base"
     base_model_name: str = "google-t5/t5-base"
     feature_dim: int = 768
-    decoder_path: str = "checkpoints/sonar_decoder.pt"
-    decoder_spm_path: str = "checkpoints/decoder_sentencepiece.model"
-
-    # Target languages for Sonar translator
-    tgt_langs: List[str] = field(default_factory=lambda: ["eng_Latn"])
-
-    # Generation parameters
-    # Note: these are ignored when using SONAR
     num_translations: int = 5
     do_sample: bool = False
     num_beams: int = 5
     temperature: float = 1.0
     max_length: int = 128
-
     verbose: bool = II("verbose")
 
 
 @dataclass
 class RunConfig:
     video_path: str = MISSING
-
     preprocessing: PreprocessingConfig = field(default_factory=lambda: PreprocessingConfig())
     feature_extraction: FeatureExtractionConfig = field(default_factory=FeatureExtractionConfig())
     translation: TranslationConfig = field(default_factory=TranslationConfig())
-    use_sonar: bool = False
     verbose: bool = False

@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+# --------------------------------------------------------
+
 import time
 from pathlib import Path
 from typing import Any, Generator
@@ -6,9 +13,9 @@ import torch
 import torch.nn as nn
 from omegaconf import DictConfig
 
-from .modeling import sign_hiera
-from .modeling.sign_hiera import SignHiera
-from .util import load_model
+from ssvp_slt.modeling import sign_hiera
+from ssvp_slt.modeling.sign_hiera import SignHiera
+from util import load_model
 
 
 def shard_generator(data: Any, shard_size: int) -> Generator[Any, None, None]:

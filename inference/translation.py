@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+# --------------------------------------------------------
+
 import time
 from typing import Dict, Tuple
 
@@ -5,7 +12,7 @@ import torch
 from omegaconf import DictConfig
 from transformers import AutoTokenizer, PreTrainedTokenizerFast
 
-from .modeling.sign_t5 import SignT5Config, SignT5ForConditionalGeneration
+from ssvp_slt.modeling.sign_t5 import SignT5Config, SignT5ForConditionalGeneration
 
 class Translator:
     def __init__(
