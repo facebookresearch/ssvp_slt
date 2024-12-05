@@ -26,7 +26,7 @@ from omegaconf import DictConfig
 from ssvp_slt.modeling.fairseq_model import FairseqTokenizer
 from transformers import PreTrainedTokenizerFast
 
-from utils_translation import (compute_accuracy, compute_bleu,
+from translation.utils_translation import (compute_accuracy, compute_bleu,
                                create_dataloader, postprocess_text)
 
 EVAL_BLEU_ORDER = 4

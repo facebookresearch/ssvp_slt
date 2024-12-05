@@ -75,7 +75,7 @@ class SignFeaturesDataset(torch.utils.data.Dataset):
                 try:
                     feature_name, length, label = line.strip().split("\t")
                     length = int(length)
-                except Exception:
+                except Exception:           
                     invalid += 1
                     continue
 
