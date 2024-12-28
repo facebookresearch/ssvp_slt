@@ -24,16 +24,26 @@ Main changes made:
 """
 
 import math
+import sys
+import time
 from functools import partial
-from typing import Callable, List, Optional, Tuple, Union
+from pathlib import Path
+from typing import Any, Callable, Generator, List, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from omegaconf import DictConfig
 from timm.models.layers import DropPath, Mlp
 
-from .sign_hiera_utils import (Reroll, Unroll, conv_nd, do_masked_conv,
-                               do_pool, pretrained_model)
+from .sign_hiera_utils import (
+    Reroll,
+    Unroll,
+    conv_nd,
+    do_masked_conv,
+    do_pool,
+    pretrained_model,
+)
 
 
 class MaskUnitAttention(nn.Module):
@@ -81,7 +91,9 @@ class MaskUnitAttention(nn.Module):
         """Input should be of shape [batch, tokens, channels]."""
 
         B, N, _ = x.shape
-        num_windows = (N // (self.q_stride * self.window_size)) if self.use_mask_unit_attn else 1
+        num_windows = (
+            (N // (self.q_stride * self.window_size)) if self.use_mask_unit_attn else 1
+        )
 
         qkv = (
             self.qkv(x)
@@ -213,7 +225,9 @@ class PatchEmbed(nn.Module):
             padding=padding,
         )
 
-    def forward(self, x: torch.Tensor, mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+    def forward(
+        self, x: torch.Tensor, mask: Optional[torch.Tensor] = None
+    ) -> torch.Tensor:
         x = do_masked_conv(x, self.proj, mask)
         x = x.reshape(x.shape[0], x.shape[1], -1).transpose(2, 1)
         return x
@@ -284,7 +298,9 @@ class SignHiera(nn.Module):
             self.pos_embed = nn.Parameter(torch.zeros(1, num_tokens, embed_dim))
 
         # Setup roll and reroll modules
-        self.unroll = Unroll(input_size, patch_stride, [q_stride] * len(self.stage_ends[:-1]))
+        self.unroll = Unroll(
+            input_size, patch_stride, [q_stride] * len(self.stage_ends[:-1])
+        )
         self.reroll = Reroll(
             input_size,
             patch_stride,
@@ -396,7 +412,9 @@ class SignHiera(nn.Module):
             ] = -100
 
         # Sort noise for each sample
-        ids_shuffle = torch.argsort(noise, dim=1)  # ascend: small is keep, large is remove
+        ids_shuffle = torch.argsort(
+            noise, dim=1
+        )  # ascend: small is keep, large is remove
         ids_restore = torch.argsort(ids_shuffle, dim=1)
 
         # Generate the binary mask: 1 is *keep*, 0 is *remove*
@@ -408,7 +426,9 @@ class SignHiera(nn.Module):
 
         return mask.bool()
 
-    def get_attention_mask(self, padding: torch.Tensor, device: torch.device) -> torch.Tensor:
+    def get_attention_mask(
+        self, padding: torch.Tensor, device: torch.device
+    ) -> torch.Tensor:
         """
         Creates a temporal attention mask based on the number of padding frames
         """
@@ -465,7 +485,9 @@ class SignHiera(nn.Module):
         intermediates = []
 
         # Zero out both mask tokens and padding (attn_mask == 0) tokens in patch embedding conv
-        patch_embed_mask = torch.logical_and(mask, attn_mask) if mask is not None else attn_mask
+        patch_embed_mask = (
+            torch.logical_and(mask, attn_mask) if mask is not None else attn_mask
+        )
         x = self.patch_embed(
             x, mask=patch_embed_mask.view(x.shape[0], 1, *self.mask_spatial_shape)
         )
@@ -487,9 +509,9 @@ class SignHiera(nn.Module):
             x = x[mask[..., None].tile(1, self.mu_size, x.shape[2])].view(
                 x.shape[0], -1, x.shape[-1]
             )
-            attn_mask = attn_mask[mask[..., None].tile(1, self.mu_size, attn_mask.shape[2])].view(
-                attn_mask.shape[0], -1, attn_mask.shape[-1]
-            )
+            attn_mask = attn_mask[
+                mask[..., None].tile(1, self.mu_size, attn_mask.shape[2])
+            ].view(attn_mask.shape[0], -1, attn_mask.shape[-1])
 
         for i, blk in enumerate(self.blocks):
             x = blk(x, attn_mask=attn_mask)
@@ -549,10 +571,14 @@ class SignHiera(nn.Module):
         if padding is not None:
             assert x.dim() == 3
             x_list = []
-            num_padding_units = padding // (self.mask_unit_size[0] * self.patch_stride[0])
+            num_padding_units = padding // (
+                self.mask_unit_size[0] * self.patch_stride[0]
+            )
             for i, features in enumerate(x):
                 x_list.append(
-                    features[: -num_padding_units[i]] if num_padding_units[i] > 0 else features
+                    features[: -num_padding_units[i]]
+                    if num_padding_units[i] > 0
+                    else features
                 )
             x = torch.concatenate(x_list, dim=0)
 
@@ -613,7 +639,12 @@ class SignHiera(nn.Module):
             proj=clip_model_cfg["text_model_proj"],
             pooler_type=clip_model_cfg["text_model_pooler"],
         )
-        clip = CLIP(embed_dim=clip_model_cfg.pop("embed_dim"), vision_cfg=vision_cfg, text_cfg=text_cfg, output_dict=True)
+        clip = CLIP(
+            embed_dim=clip_model_cfg.pop("embed_dim"),
+            vision_cfg=vision_cfg,
+            text_cfg=text_cfg,
+            output_dict=True,
+        )
 
         print(f"Loading CLIP weights from {clip_model_path}")
         msg = clip.load_state_dict(model_params)
@@ -625,6 +656,130 @@ class SignHiera(nn.Module):
         print(msg)
 
         return model
+
+
+def shard_generator(data: Any, shard_size: int) -> Generator[Any, None, None]:
+    for i in range(0, len(data), shard_size):
+        yield data[i : i + shard_size]
+
+
+SIGNHIERA_EXPECTED_MISSING = {
+    "norm.weight",
+    "norm.bias",
+    "head.projection.weight",
+    "head.projection.bias",
+}
+SIGNHIERA_EXPECTED_EXTRA = (
+    "decoder",
+    "multi_scale_fusion",
+    "encoder_norm",
+    "mask_token",
+)
+
+
+def load_model(
+    model: torch.nn.Module, checkpoint_path: Path, model_key: str = "model"
+) -> None:
+    """
+    Loads only the model from a saved checkpoint
+    Model loading is not strict and parameters are evicted from the loaded state_dict if their
+    shape does not match the one in passed `model`.
+    """
+
+    with open(checkpoint_path, "rb") as f:
+        checkpoint = torch.load(f, map_location="cpu")
+
+    # Try all of these if necessary
+    for candidate_key in [model_key, "model", "model_state"]:
+        if candidate_key in checkpoint.keys():
+            checkpoint_model = checkpoint[candidate_key]
+            break
+
+    new_checkpoint_model = {}
+    for k, v in checkpoint_model.items():
+        if "feature_proj" in k and "feature_projection" not in k:
+            k = k.replace("feature_proj", "feature_projection.feature_proj")
+
+        if k in model.state_dict() and model.state_dict()[k].shape != v.shape:
+            print(f"Pruning {k} due to size mismatch")
+        else:
+            new_checkpoint_model[k] = v
+
+    missing_keys, unexpected_keys = model.load_state_dict(
+        new_checkpoint_model, strict=False
+    )
+    # Filter out keys expected to be missing or extra when loading SignHiera
+    missing_keys = [k for k in missing_keys if k not in SIGNHIERA_EXPECTED_MISSING]
+    unexpected_keys = [
+        k for k in unexpected_keys if not k.startswith(SIGNHIERA_EXPECTED_EXTRA)
+    ]
+    if not (missing_keys or unexpected_keys):
+        print("All keys matched successfully\n")
+    else:
+        print(f"{missing_keys = }, {unexpected_keys = }\n")
+
+
+class FeatureExtractor:
+    def __init__(self, config: DictConfig, device: torch.device):
+        self.config = config
+        self.device = device
+
+        self.model = self._load_model()
+
+    def _load_model(self) -> SignHiera:
+        """
+        Loads a pretrained SignHiera model for feature extraction and moves it to specified device
+        """
+
+        model = sys.modules[__name__].__dict__[self.config.model_name](
+            pretrained=False, strict=False
+        )
+
+        print("Loading feature extractor")
+        load_model(model, Path(self.config.pretrained_model_path))
+
+        model.head = nn.Identity()
+        model.eval()
+        model.to(self.device)
+
+        return model
+
+    @torch.inference_mode()
+    def __call__(self, frames: torch.Tensor, padding: torch.Tensor) -> torch.Tensor:
+
+        t0 = time.time()
+
+        frames = frames.to(self.device)
+        padding = padding.to(self.device)
+
+        if len(frames) > self.config.max_batch_size:
+
+            shard_outputs = []
+
+            frame_shards = shard_generator(frames, self.config.max_batch_size)
+            padding_shards = shard_generator(padding, self.config.max_batch_size)
+
+            for frames_shard, padding_shard in zip(frame_shards, padding_shards):
+                with torch.cuda.amp.autocast(enabled=self.config.fp16):
+                    shard_output = self.model.extract_features(
+                        frames_shard, padding=padding_shard
+                    )
+                if len(shard_output.shape) == 1:
+                    shard_output = shard_output.unsqueeze(0)
+
+                shard_outputs.append(shard_output)
+
+            outputs = torch.concatenate(shard_outputs, dim=0)
+        else:
+            with torch.cuda.amp.autocast(enabled=self.config.fp16):
+                outputs = self.model.extract_features(frames, padding=padding)
+
+        t1 = time.time()
+
+        if self.config.verbose:
+            print(f"Feature extraction: {t1 - t0:.3f}s")
+
+        return outputs
 
 
 # Video models
