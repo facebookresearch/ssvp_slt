@@ -79,6 +79,9 @@ Alternatively, download the files manually via these links:
 > [!NOTE]
 > Check out our [paper](https://aclanthology.org/2024.acl-long.467/) for detailed information on the DailyMoth-70h dataset.
 
+----
+### Translation using SONAR
+In order to try ASL translation using the massively multilingual and multimodal SONAR sentence embedding space, please see [here](examples/sonar/README.md).
 
 ---- 
 ### Citing our work
