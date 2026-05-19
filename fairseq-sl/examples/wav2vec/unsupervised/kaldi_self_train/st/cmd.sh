@@ -1,3 +1,8 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
 # you can change cmd.sh depending on what type of queue you are using.
 # If you have no queueing system and want to run on a local machine, you
 # can change all instances 'queue.pl' to run.pl (but be careful and run
