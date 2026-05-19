@@ -44,7 +44,7 @@ setup(
         "torch>=2.0.0",
         "torchvision>=0.15.1",
         "tqdm",
-        "transformers>=4.32.0",
+        "transformers>=4.50.0",
         "truecase",
         "urllib3",
         "wandb",

@@ -1,4 +1,9 @@
 #!/usr/bin/env zsh
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
 
 job_id=$1
 task_id=$2

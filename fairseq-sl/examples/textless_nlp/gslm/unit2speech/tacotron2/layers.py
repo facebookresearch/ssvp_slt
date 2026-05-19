@@ -1,3 +1,8 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
 import torch
 from librosa.filters import mel as librosa_mel_fn
 from .audio_processing import dynamic_range_compression
